@@ -4,15 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#05040a" />
-<meta name="description" content="Code:Villan — VRChatで行う悪役ロールプレイ接客イベント。冥界の主ハデスの館で開かれる、悪役たちの晩餐会へご招待。" />
-<meta property="og:title" content="Code:Villan｜悪役たちの晩餐" />
+<meta name="description" content="Code:Villain — VRChatで行う悪役ロールプレイ接客イベント。冥界の主ハデスの館で開かれる、悪役たちの晩餐会へご招待。" />
+<meta property="og:title" content="Code:Villain｜悪役たちの晩餐" />
 <meta property="og:description" content="招待状を受け取った客人だけが、館を訪れることができる。" />
 <meta property="og:image" content="assets/codevillan-welcome.png" />
 <meta property="og:type" content="website" />
-<title>Code:Villan｜悪役たちの晩餐</title>
+<title>Code:Villain｜悪役たちの晩餐</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Shippori+Mincho+B1:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@1,300&family=Shippori+Mincho+B1:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body class="is-gated">
@@ -77,7 +77,11 @@
     <!-- STEP2: 歓迎 -->
     <div class="gate__panel gate__panel--welcome">
       <figure class="welcome-visual">
-        <img src="assets/codevillan-welcome.png" alt="手を差し伸べて客人を迎えるCode:Villanの悪役たち" />
+        <picture>
+          <source srcset="assets/codevillan-welcome.webp" type="image/webp" />
+          <img src="assets/codevillan-welcome.png" width="864" height="1536"
+               alt="手を差し伸べて客人を迎えるCode:Villainの悪役たち" />
+        </picture>
         <span class="welcome-visual__flare"></span>
       </figure>
       <div class="welcome-copy">
@@ -96,10 +100,10 @@
 
 <!-- ============ ヘッダー ============ -->
 <header class="header">
-  <a class="brand" href="#top" aria-label="Code:Villan トップへ">
+  <a class="brand" href="#top" aria-label="Code:Villain トップへ">
     <span class="brand__mark">V</span>
     <span class="brand__text">
-      <strong>CODE:VILLAN</strong>
+      <strong>CODE:VILLAIN</strong>
       <small>THE BANQUET OF EVIL</small>
     </span>
   </a>
@@ -129,7 +133,10 @@
       <p class="hero__eyebrow reveal">VRCHAT / THE BANQUET OF VILLAINS</p>
 
       <div class="hero__logo reveal" data-parallax="0.12">
-        <img src="assets/codevillan-twitter-banner.jpg" alt="Code:Villan" />
+        <picture>
+          <source srcset="assets/codevillan-twitter-banner.webp" type="image/webp" />
+          <img src="assets/codevillan-twitter-banner.jpg" width="1500" height="500" alt="Code:Villain" />
+        </picture>
       </div>
 
       <h2 class="hero__title" data-split>悪役たちの晩餐</h2>
@@ -239,23 +246,13 @@
       </header>
 
       <div class="cast-grid">
-        <article class="cast reveal" data-cast="hades" tabindex="0" role="button" aria-label="ハデスの詳細を開く">
-          <span class="cast__idx">HOST / 01</span>
-          <div class="cast__sigil cast__sigil--hades" aria-hidden="true"></div>
-          <h3 class="cast__name">HADES</h3>
-          <p class="cast__ja">ハデス</p>
-          <p class="cast__role">冥界の主 ／ 晩餐会の主催者</p>
-          <p class="cast__quote">「席は用意してある。まずは、名を聞かせてくれ。」</p>
-          <span class="cast__more">READ MORE +</span>
-        </article>
-
         <article class="cast cast--duo reveal" data-cast="jekyllhyde" tabindex="0" role="button" aria-label="ジキルとハイドの詳細を開く">
-          <span class="cast__idx">HOST / 02</span>
+          <span class="cast__idx">HOST / 01</span>
           <div class="cast__sigil cast__sigil--duo" aria-hidden="true"></div>
           <h3 class="cast__name">JEKYLL &amp; HYDE</h3>
           <p class="cast__ja">ジキル と ハイド</p>
           <p class="cast__role">診る者と、その影 ／ ひとつの器のふたり</p>
-          <p class="cast__quote">「診察を始めましょう。」<br />「ぜんぶ嘘だよ、こっちおいでよ！」</p>
+          <p class="cast__quote">「診察を始めましょう。」<br />「先生の話はもういいでしょ、こっちおいでよ！」</p>
           <span class="cast__more">READ MORE +</span>
         </article>
 
@@ -322,11 +319,6 @@
           <span class="sched__time"><b>23:05</b><i>▼ 23:25</i></span>
           <div class="sched__body"><h4>第3ローテーション</h4></div>
         </li>
-        <li class="sched__note reveal">
-          <p class="sched__note-en">HOW THE VILLAINS ARE DIVIDED</p>
-          <h4>運用ルール</h4>
-          <p>ヴィランは<b>個室対応ヴィラン</b>（1ローテーションにつき最大4人）と、<b>晩餐会場交流ヴィラン</b>に分かれます。</p>
-        </li>
 
         <li class="sched__phase reveal">
           <span class="sched__ph-no">III</span>
@@ -379,7 +371,7 @@
         <li class="reveal">「怖いけれど、<b>もう一度会いたい</b>。」</li>
         <li class="reveal">「この人物が悪になった理由を、<b>もっと知りたい</b>。」</li>
       </ul>
-      <p class="values__foot reveal">Code:Villanは、悪役を<b>倒す</b>イベントではありません。<br />悪役と向き合い、言葉を交わし、その存在を知るイベントです。</p>
+      <p class="values__foot reveal">Code:Villainは、悪役を<b>倒す</b>イベントではありません。<br />悪役と向き合い、言葉を交わし、その存在を知るイベントです。</p>
     </div>
   </section>
 
@@ -399,7 +391,7 @@
         <p class="s-num">05</p>
         <p class="s-en">YOUR INVITATION</p>
         <h2 class="s-title" data-split>招待状</h2>
-        <p class="s-lead">開催情報・参加方法はこちら。<br /><small>※日時と参加URLは index.html のこのセクションを書き換えてください。</small></p>
+        <p class="s-lead">開催情報・参加方法はこちら。</p>
       </header>
 
       <article class="invite reveal" id="invite-card">
@@ -408,10 +400,9 @@
         <p class="invite__small">FORMAL INVITATION TO THE BANQUET OF EVIL</p>
         <h3 class="invite__title">悪役たちの晩餐へ<br />ご招待申し上げます。</h3>
         <dl class="invite__info">
-          <div><dt>DATE</dt><dd>20XX.XX.XX <span>SAT</span></dd></div>
           <div><dt>TIME</dt><dd>22:00 <span>OPEN ／ 0:00 CLOSE</span></dd></div>
           <div><dt>PLACE</dt><dd>VRChat <span>／ HADES' MANSION</span></dd></div>
-          <div><dt>JOIN</dt><dd>Group Instance <span>／ 参加無料</span></dd></div>
+          <div><dt>JOIN</dt><dd>Request Invite</dd></div>
         </dl>
         <p class="invite__dress">DRESS CODE — あなたが最も美しいと思う姿で。</p>
         <a class="btn btn--primary btn--wide" href="#" onclick="return false;"><span>参加方法を確認する</span></a>
@@ -441,9 +432,9 @@
 <footer class="footer">
   <div class="footer__brand">
     <span class="brand__mark">V</span>
-    <p>CODE:VILLAN<br /><small>THE BANQUET OF EVIL</small></p>
+    <p>CODE:VILLAIN<br /><small>THE BANQUET OF EVIL</small></p>
   </div>
-  <p class="footer__copy">© CODE:VILLAN — ALL SINS RESERVED.</p>
+  <p class="footer__copy">© CODE:VILLAIN — ALL SINS RESERVED.</p>
   <a class="footer__back" href="#top">RETURN TO THE FOREST ↑</a>
 </footer>
 
@@ -478,8 +469,8 @@
             <p class="duality__desc">物静かで理性的。しかし人間の心を診察と実験の対象として扱い、「治療」という言葉で客人の内側にある悪を暴こうとします。</p>
           </div>
           <div class="duality__pane" data-pane="hyde">
-            <p class="duality__line">ぜんぶ嘘だよ。アイツが我慢してるものが、ぜんぶ僕さ！</p>
-            <p class="duality__desc">明るく無邪気で感情表現が大きい。怖がらせたいのではなく、一緒に楽しみたい、壊したい、そばに置きたい——その欲求を隠しません。</p>
+            <p class="duality__line">ぜんぶ嘘だよ。先生が我慢してるものが、ぜんぶ僕さ！</p>
+            <p class="duality__desc">明るく無邪気で感情表現が大きい。怖がらせたいのではなく、一緒に楽しみたい、壊したい、そばに置きたい——その欲求を隠しません。ジキルのことは<b>「先生」</b>と呼び、からかいながらも、どこか嬉しそうです。</p>
           </div>
         </div>
         <p class="duality__foot">ふたりの言葉が交わるとき、理性と欲望、善と悪の矛盾が姿を現します。</p>
@@ -499,6 +490,17 @@
     <button id="seal-answer" class="btn btn--primary btn--wide" type="button"><span>回答を封印する</span></button>
     <p class="sealed" id="sealed-msg" hidden>——その答えは、館に記録されました。</p>
     <p class="modal__note">※この回答はどこにも送信されません。ブラウザ内でのみ扱われます。</p>
+  </div>
+</div>
+
+<!-- ============ 封印の儀（回答後の演出） ============ -->
+<div class="ritual" id="ritual" aria-hidden="true">
+  <div class="ritual__veil"></div>
+  <div class="ritual__ring" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="ritual__stage">
+    <p class="ritual__burn" id="ritual-burn"></p>
+    <div class="ritual__reply" id="ritual-reply"></div>
+    <p class="ritual__hint" id="ritual-hint">— どこかに触れて、館へ戻る —</p>
   </div>
 </div>
 
