@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#05040a" />
+<meta name="description" content="Code:Villan — VRChatで行う悪役ロールプレイ接客イベント。冥界の主ハデスの館で開かれる、悪役たちの晩餐会へご招待。" />
+<meta property="og:title" content="Code:Villan｜悪役たちの晩餐" />
+<meta property="og:description" content="招待状を受け取った客人だけが、館を訪れることができる。" />
+<meta property="og:image" content="assets/codevillan-welcome.png" />
+<meta property="og:type" content="website" />
+<title>Code:Villan｜悪役たちの晩餐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Shippori+Mincho+B1:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="is-gated">
+
+<!-- ============ 背景レイヤー（常時） ============ -->
+<div class="ambience" aria-hidden="true">
+  <div class="ambience__moon"></div>
+  <div class="ambience__glow"></div>
+  <canvas id="dust-canvas"></canvas>
+  <div class="ambience__fog ambience__fog--far"></div>
+  <div class="ambience__fog ambience__fog--near"></div>
+  <div class="ambience__forest">
+    <span class="branch branch--tl"></span>
+    <span class="branch branch--tr"></span>
+    <span class="branch branch--bl"></span>
+    <span class="branch branch--br"></span>
+  </div>
+  <div class="ambience__vignette"></div>
+  <div class="ambience__grain"></div>
+</div>
+<div class="candle-cursor" aria-hidden="true"></div>
+
+<!-- ============ 招待の儀（オープニング） ============ -->
+<div id="gate" class="gate" data-step="1" role="dialog" aria-label="招待状">
+  <div class="gate__stage">
+
+    <!-- 扉 -->
+    <div class="gate__doors" aria-hidden="true">
+      <div class="gate__door gate__door--l"><span class="gate__door-orn"></span></div>
+      <div class="gate__door gate__door--r"><span class="gate__door-orn"></span></div>
+      <div class="gate__seam"></div>
+    </div>
+
+    <!-- STEP1: 封蝋 -->
+    <div class="gate__panel gate__panel--seal">
+      <p class="gate__eyebrow">AN INVITATION HAS ARRIVED</p>
+      <h1 class="gate__title">招待状が、届いています。</h1>
+      <p class="gate__lead">冥界のどこか、人の世から切り離された館より。<br />今宵の晩餐に、あなたの席が用意されました。</p>
+
+      <button id="break-seal" class="seal" type="button" aria-label="封を切る">
+        <span class="seal__halo"></span>
+        <svg class="seal__wax" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <radialGradient id="waxGrad" cx="38%" cy="32%" r="72%">
+              <stop offset="0%" stop-color="#e0355a"/>
+              <stop offset="45%" stop-color="#9d1029"/>
+              <stop offset="100%" stop-color="#3d0410"/>
+            </radialGradient>
+          </defs>
+          <path class="seal__blob" fill="url(#waxGrad)" d="M60 4c14 0 21 9 32 14s24 3 24 17c0 12-8 17-8 25s9 14 6 26c-3 11-16 10-24 16s-11 18-24 18-19-12-30-17S12 108 8 96c-4-12 5-17 5-26S4 55 6 43c2-11 15-9 24-15S46 4 60 4z"/>
+          <text class="seal__letter" x="60" y="76" text-anchor="middle">V</text>
+        </svg>
+        <span class="seal__crack"></span>
+        <span class="seal__shards">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </span>
+      </button>
+      <p class="gate__hint"><span>封を切る</span></p>
+      <button class="btn-text btn-text--skip" type="button" data-skip>演出をとばす</button>
+    </div>
+
+    <!-- STEP2: 歓迎 -->
+    <div class="gate__panel gate__panel--welcome">
+      <figure class="welcome-visual">
+        <img src="assets/codevillan-welcome.png" alt="手を差し伸べて客人を迎えるCode:Villanの悪役たち" />
+        <span class="welcome-visual__flare"></span>
+      </figure>
+      <div class="welcome-copy">
+        <p class="gate__eyebrow">THEY ARE WAITING FOR YOU</p>
+        <h2 class="welcome-copy__title">ようこそ、客人。</h2>
+        <p class="welcome-copy__line" data-type>「——待っていた。ずいぶん遅かったね。」</p>
+        <p class="welcome-copy__line" data-type data-delay="1900">「さあ、その手を。逃げるなら、今のうちだよ。」</p>
+        <button id="take-hand" class="btn btn--primary btn--hand" type="button">
+          <span>その手を取る</span>
+        </button>
+        <button class="btn-text" type="button" data-skip>案内だけ見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ヘッダー ============ -->
+<header class="header">
+  <a class="brand" href="#top" aria-label="Code:Villan トップへ">
+    <span class="brand__mark">V</span>
+    <span class="brand__text">
+      <strong>CODE:VILLAN</strong>
+      <small>THE BANQUET OF EVIL</small>
+    </span>
+  </a>
+
+  <nav id="nav" class="nav" aria-label="メインメニュー">
+    <a href="#top" class="nav__link"><i>00</i>TOP</a>
+    <a href="#world" class="nav__link"><i>01</i>WORLD</a>
+    <a href="#concept" class="nav__link"><i>02</i>CONCEPT</a>
+    <a href="#hosts" class="nav__link"><i>03</i>HOSTS</a>
+    <a href="#banquet" class="nav__link"><i>04</i>BANQUET</a>
+    <a href="#invitation" class="nav__link"><i>05</i>INVITATION</a>
+  </nav>
+
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">
+    <span></span><span></span>
+    <span class="sr-only">メニュー</span>
+  </button>
+</header>
+
+<div class="scroll-rail" aria-hidden="true"><span id="scroll-progress"></span></div>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow reveal">VRCHAT / THE BANQUET OF VILLAINS</p>
+
+      <div class="hero__logo reveal" data-parallax="0.12">
+        <img src="assets/codevillan-twitter-banner.jpg" alt="Code:Villan" />
+      </div>
+
+      <h2 class="hero__title" data-split>悪役たちの晩餐</h2>
+
+      <p class="hero__lead reveal">
+        黒い木々の向こう、月のない夜にだけ現れる館がある。<br />
+        そこでは神話も童話も文学も、みな席をひとつずつ与えられている。
+      </p>
+
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary" href="#hosts"><span>迎える者たちを見る</span></a>
+        <a class="btn btn--ghost" href="#invitation"><span>招待状を確かめる</span></a>
+      </div>
+
+      <p class="hero__whisper" aria-hidden="true">
+        <span>「君は、どんな悪を胸に隠している？」</span>
+      </p>
+    </div>
+
+    <a class="scroll-cue" href="#world" aria-label="下へスクロール">
+      <span class="scroll-cue__line"></span>
+      <span class="scroll-cue__text">DESCEND</span>
+    </a>
+  </section>
+
+  <!-- ============ 01 WORLD ============ -->
+  <section id="world" class="section section--world">
+    <div class="shell">
+      <header class="s-head reveal">
+        <p class="s-num">01</p>
+        <p class="s-en">THE MANSION IN THE UNDERWORLD</p>
+        <h2 class="s-title" data-split>人の世から、切り離された場所</h2>
+      </header>
+
+      <div class="world-grid">
+        <div class="world-copy reveal">
+          <p class="dropcap">
+            冥界のどこかに、ハデスの館があります。その館ではときおり「悪役たちの晩餐」が開催されます。招待状を受け取った客人だけが館を訪れることができ、そこに集められた悪役たちと同じ時間を過ごします。
+          </p>
+          <p>
+            館にいる悪役たちは、それぞれ異なる目的を持っています。悪役たちは客人を歓迎しますが——その歓迎が、善意によるものとは限りません。
+          </p>
+        </div>
+
+        <ul class="motive-list">
+          <li class="motive reveal"><span class="motive__no">i</span><p>客人を<b>観察</b>したい者。</p></li>
+          <li class="motive reveal"><span class="motive__no">ii</span><p>自分の<b>思想</b>を理解させたい者。</p></li>
+          <li class="motive reveal"><span class="motive__no">iii</span><p>客人の心に潜む<b>悪</b>を暴きたい者。</p></li>
+          <li class="motive reveal"><span class="motive__no">iv</span><p>新しい<b>玩具</b>や仲間を探している者。</p></li>
+          <li class="motive reveal"><span class="motive__no">v</span><p>あるいは、ただ<b>寂しさ</b>を埋めたい者。</p></li>
+        </ul>
+      </div>
+
+      <blockquote class="pull-quote reveal">
+        <p>「ようこそ、客人。<br />——歓迎するとは言ったが、無事に帰すとは言っていない。」</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ============ 02 CONCEPT ============ -->
+  <section id="concept" class="section section--concept">
+    <div class="shell">
+      <header class="s-head s-head--center reveal">
+        <p class="s-num">02</p>
+        <p class="s-en">CONCEPT</p>
+        <h2 class="s-title" data-split>悪役と会話し、悪役の物語に巻き込まれる</h2>
+      </header>
+
+      <p class="concept-lead reveal">
+        悪役は単純な敵や怖い存在としてではなく、<b>一人の人格を持った登場人物</b>として描きます。<br />
+        その思想、価値観、狂気、欲望、執着、悲しみ。<br />
+        客人自身も<b>物語の一部</b>として、その言葉に加わることになります。
+      </p>
+
+      <div class="q-deck reveal">
+        <div class="q-deck__frame">
+          <p class="q-deck__label">THE QUESTIONS WE ASK</p>
+          <ul class="q-deck__list" id="q-list">
+            <li class="is-active">なぜ、悪になったのか。</li>
+            <li>その人物にとっての正義とは何か。</li>
+            <li>何を守るために、悪を選んだのか。</li>
+            <li>善と悪の境界は、どこにあるのか。</li>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="tone-strip reveal" aria-label="デザインの軸">
+        <li>GOTHIC</li><li>DARK FANTASY</li><li>BANQUET</li>
+        <li>UNDERWORLD</li><li>MANSION</li><li>MADNESS</li><li>TEMPTATION</li>
+      </ul>
+
+      <p class="concept-note reveal">
+        ただし、終始暗く重いだけではありません。明るく無邪気な狂人、紳士的な悪役、妖艶な悪役、コミカルな悪役。<br />
+        <b>怪しく、美しく、少し恐ろしい</b>——雰囲気はキャラクターによって大きく異なります。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 03 HOSTS ============ -->
+  <section id="hosts" class="section section--hosts">
+    <div class="shell">
+      <header class="s-head s-head--center reveal">
+        <p class="s-num">03</p>
+        <p class="s-en">THE ONES WHO WELCOME YOU</p>
+        <h2 class="s-title" data-split>あなたを迎える悪役たち</h2>
+        <p class="s-lead">カードを開くと、彼らが語りはじめます。</p>
+      </header>
+
+      <div class="cast-grid">
+        <article class="cast reveal" data-cast="hades" tabindex="0" role="button" aria-label="ハデスの詳細を開く">
+          <span class="cast__idx">HOST / 01</span>
+          <div class="cast__sigil cast__sigil--hades" aria-hidden="true"></div>
+          <h3 class="cast__name">HADES</h3>
+          <p class="cast__ja">ハデス</p>
+          <p class="cast__role">冥界の主 ／ 晩餐会の主催者</p>
+          <p class="cast__quote">「席は用意してある。まずは、名を聞かせてくれ。」</p>
+          <span class="cast__more">READ MORE +</span>
+        </article>
+
+        <article class="cast cast--duo reveal" data-cast="jekyllhyde" tabindex="0" role="button" aria-label="ジキルとハイドの詳細を開く">
+          <span class="cast__idx">HOST / 02</span>
+          <div class="cast__sigil cast__sigil--duo" aria-hidden="true"></div>
+          <h3 class="cast__name">JEKYLL &amp; HYDE</h3>
+          <p class="cast__ja">ジキル と ハイド</p>
+          <p class="cast__role">診る者と、その影 ／ ひとつの器のふたり</p>
+          <p class="cast__quote">「診察を始めましょう。」<br />「ぜんぶ嘘だよ、こっちおいでよ！」</p>
+          <span class="cast__more">READ MORE +</span>
+        </article>
+
+        <article class="cast cast--tba reveal">
+          <span class="cast__idx">HOST / ??</span>
+          <div class="cast__sigil cast__sigil--tba" aria-hidden="true"></div>
+          <h3 class="cast__name">???</h3>
+          <p class="cast__ja">まだ名を明かさぬ者たち</p>
+          <p class="cast__role">神話・童話・文学から、更なる悪役が館へ</p>
+          <p class="cast__quote">「——招かれるのは、君だけじゃない。」</p>
+          <span class="cast__more">COMING SOON</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 BANQUET ============ -->
+  <section id="banquet" class="section section--banquet">
+    <div class="shell">
+      <header class="s-head reveal">
+        <p class="s-num">04</p>
+        <p class="s-en">TIME SCHEDULE</p>
+        <h2 class="s-title" data-split>晩餐の流れ</h2>
+        <p class="s-lead">22:00 に扉が開き、0:00 に宴は終わります。<br /><small>※進行状況により、時刻は前後する場合があります。</small></p>
+      </header>
+
+      <ol class="sched" id="sched">
+
+        <li class="sched__phase reveal">
+          <span class="sched__ph-no">I</span>
+          <p class="sched__ph-en">PRELUDE</p>
+          <h3>準備・導入</h3>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>22:00</b><i>▼ 22:10</i></span>
+          <div class="sched__body">
+            <h4>リクイン受付開始</h4>
+            <p>リクエストインバイトの受付を開始します。館の前で、客人をお待ちしています。</p>
+          </div>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>22:10</b><i>▼ 22:25</i></span>
+          <div class="sched__body">
+            <h4>晩餐会場へ移動</h4>
+            <p>案内に従って、館の奥——晩餐会場へお進みください。</p>
+          </div>
+        </li>
+
+        <li class="sched__phase reveal">
+          <span class="sched__ph-no">II</span>
+          <p class="sched__ph-en">ROTATION</p>
+          <h3>ローテーション</h3>
+          <p class="sched__ph-lead">1ローテーションは20分。全3回にわたって、悪役たちが客人をお迎えします。</p>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>22:25</b><i>▼ 22:45</i></span>
+          <div class="sched__body"><h4>第1ローテーション</h4></div>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>22:45</b><i>▼ 23:05</i></span>
+          <div class="sched__body"><h4>第2ローテーション</h4></div>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>23:05</b><i>▼ 23:25</i></span>
+          <div class="sched__body"><h4>第3ローテーション</h4></div>
+        </li>
+        <li class="sched__note reveal">
+          <p class="sched__note-en">HOW THE VILLAINS ARE DIVIDED</p>
+          <h4>運用ルール</h4>
+          <p>ヴィランは<b>個室対応ヴィラン</b>（1ローテーションにつき最大4人）と、<b>晩餐会場交流ヴィラン</b>に分かれます。</p>
+        </li>
+
+        <li class="sched__phase reveal">
+          <span class="sched__ph-no">III</span>
+          <p class="sched__ph-en">AFTER TIME</p>
+          <h3>アフタータイム</h3>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>23:25</b><i>▼ 23:40</i></span>
+          <div class="sched__body">
+            <h4>アフタータイム</h4>
+            <p>第3ローテーションの客人と、個室対応ヴィランが合流します。</p>
+          </div>
+        </li>
+        <li class="sched__slot reveal">
+          <span class="sched__time"><b>23:40</b><i>▼ 23:55</i></span>
+          <div class="sched__body">
+            <h4>広場へ移動・集合写真撮影</h4>
+            <p>館を出て広場へ。悪役たちと並んで、今宵の記録を残します。</p>
+          </div>
+        </li>
+
+        <li class="sched__phase reveal">
+          <span class="sched__ph-no">IV</span>
+          <p class="sched__ph-en">ENDING</p>
+          <h3>エンディング</h3>
+        </li>
+        <li class="sched__slot sched__slot--last reveal">
+          <span class="sched__time"><b>23:55</b><i>▼ 0:00</i></span>
+          <div class="sched__body">
+            <h4>エンディング</h4>
+            <p>宴が終わり、扉が閉じます。あなたが何を持ち帰るかは、あなた次第です。</p>
+          </div>
+        </li>
+
+        <span class="sched__line" aria-hidden="true"><i id="sched-progress"></i></span>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 大切にしていること ============ -->
+  <section class="section section--values">
+    <div class="shell">
+      <header class="s-head s-head--center reveal">
+        <p class="s-en">WHAT WE CHERISH</p>
+        <h2 class="s-title" data-split>怖さだけではなく、魅力を。</h2>
+      </header>
+      <ul class="values">
+        <li class="reveal">「この悪役の考え方が、<b>少し分かる</b>。」</li>
+        <li class="reveal">「危険なのに、<b>惹かれてしまう</b>。」</li>
+        <li class="reveal">「怖いけれど、<b>もう一度会いたい</b>。」</li>
+        <li class="reveal">「この人物が悪になった理由を、<b>もっと知りたい</b>。」</li>
+      </ul>
+      <p class="values__foot reveal">Code:Villanは、悪役を<b>倒す</b>イベントではありません。<br />悪役と向き合い、言葉を交わし、その存在を知るイベントです。</p>
+    </div>
+  </section>
+
+  <!-- ============ 問いかけ ============ -->
+  <section class="confess" aria-label="客人への問いかけ">
+    <div class="confess__inner reveal">
+      <p class="s-en">A QUESTION FROM THE DARK</p>
+      <h2 class="confess__q" data-split>もしあなたが悪役なら、何を守るために悪になりますか。</h2>
+      <button id="open-confess" class="btn btn--primary" type="button"><span>問いに答える</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 05 INVITATION ============ -->
+  <section id="invitation" class="section section--invitation">
+    <div class="shell invite-layout">
+      <header class="s-head reveal">
+        <p class="s-num">05</p>
+        <p class="s-en">YOUR INVITATION</p>
+        <h2 class="s-title" data-split>招待状</h2>
+        <p class="s-lead">開催情報・参加方法はこちら。<br /><small>※日時と参加URLは index.html のこのセクションを書き換えてください。</small></p>
+      </header>
+
+      <article class="invite reveal" id="invite-card">
+        <div class="invite__sheen" aria-hidden="true"></div>
+        <div class="invite__wax">V</div>
+        <p class="invite__small">FORMAL INVITATION TO THE BANQUET OF EVIL</p>
+        <h3 class="invite__title">悪役たちの晩餐へ<br />ご招待申し上げます。</h3>
+        <dl class="invite__info">
+          <div><dt>DATE</dt><dd>20XX.XX.XX <span>SAT</span></dd></div>
+          <div><dt>TIME</dt><dd>22:00 <span>OPEN ／ 0:00 CLOSE</span></dd></div>
+          <div><dt>PLACE</dt><dd>VRChat <span>／ HADES' MANSION</span></dd></div>
+          <div><dt>JOIN</dt><dd>Group Instance <span>／ 参加無料</span></dd></div>
+        </dl>
+        <p class="invite__dress">DRESS CODE — あなたが最も美しいと思う姿で。</p>
+        <a class="btn btn--primary btn--wide" href="#" onclick="return false;"><span>参加方法を確認する</span></a>
+        <p class="invite__foot">最新情報は公式Xにて告知します。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 注意事項 ============ -->
+  <section id="rules" class="section section--rules">
+    <div class="shell">
+      <header class="s-head s-head--center reveal">
+        <p class="s-en">NOTICE TO ALL GUESTS</p>
+        <h2 class="s-title" data-split>館でのお願い</h2>
+      </header>
+      <div class="rules">
+        <p class="reveal"><span>01</span>キャストへの暴言・過度な絡み・進行妨害はお控えください。</p>
+        <p class="reveal"><span>02</span>過度な接触や、他の客人が不快になる行為は禁止です。</p>
+        <p class="reveal"><span>03</span>演出上、恐怖・狂気・強い言葉を含む場合があります。</p>
+        <p class="reveal"><span>04</span>本イベントは悪役ロールプレイ接客イベントです。館で交わされる言葉は物語の中のものとして、現実とは切り離してお楽しみください。</p>
+        <p class="reveal"><span>05</span>扉を開く覚悟のある方だけ、どうぞお越しください。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__brand">
+    <span class="brand__mark">V</span>
+    <p>CODE:VILLAN<br /><small>THE BANQUET OF EVIL</small></p>
+  </div>
+  <p class="footer__copy">© CODE:VILLAN — ALL SINS RESERVED.</p>
+  <a class="footer__back" href="#top">RETURN TO THE FOREST ↑</a>
+</footer>
+
+<!-- ============ キャスト詳細モーダル ============ -->
+<div class="modal" id="cast-modal" role="dialog" aria-modal="true" aria-labelledby="cast-modal-name" hidden>
+  <div class="modal__veil" data-close></div>
+  <div class="modal__box">
+    <button class="modal__close" type="button" data-close aria-label="閉じる">×</button>
+    <p class="modal__idx" id="cast-modal-idx"></p>
+    <h3 class="modal__name" id="cast-modal-name"></h3>
+    <p class="modal__ja" id="cast-modal-ja"></p>
+    <p class="modal__role" id="cast-modal-role"></p>
+    <blockquote class="modal__quote" id="cast-modal-quote"></blockquote>
+    <div class="modal__body" id="cast-modal-body"></div>
+
+    <!-- ジキル＆ハイドのときだけ現れる二面性ブロック -->
+    <div class="duality" id="duality" data-side="jekyll" hidden>
+      <div class="duality__bg" aria-hidden="true"></div>
+      <div class="duality__inner">
+        <p class="s-en">TWO NAMES, ONE MAN</p>
+        <h3 class="duality__title">理性と欲望は、<br />同じ器に入っている。</h3>
+
+        <div class="duality__switch" role="group" aria-label="ジキルとハイドの切替">
+          <button class="duality__btn is-on" type="button" data-side="jekyll">JEKYLL</button>
+          <span class="duality__knob" aria-hidden="true"></span>
+          <button class="duality__btn" type="button" data-side="hyde">HYDE</button>
+        </div>
+
+        <div class="duality__panes">
+          <div class="duality__pane" data-pane="jekyll">
+            <p class="duality__line">私は善である。だから、あなたの中の悪を取り除いてさしあげましょう。</p>
+            <p class="duality__desc">物静かで理性的。しかし人間の心を診察と実験の対象として扱い、「治療」という言葉で客人の内側にある悪を暴こうとします。</p>
+          </div>
+          <div class="duality__pane" data-pane="hyde">
+            <p class="duality__line">ぜんぶ嘘だよ。アイツが我慢してるものが、ぜんぶ僕さ！</p>
+            <p class="duality__desc">明るく無邪気で感情表現が大きい。怖がらせたいのではなく、一緒に楽しみたい、壊したい、そばに置きたい——その欲求を隠しません。</p>
+          </div>
+        </div>
+        <p class="duality__foot">ふたりの言葉が交わるとき、理性と欲望、善と悪の矛盾が姿を現します。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 問いかけダイアログ ============ -->
+<div class="modal modal--confess" id="confess-modal" role="dialog" aria-modal="true" aria-labelledby="confess-title" hidden>
+  <div class="modal__veil" data-close></div>
+  <div class="modal__box">
+    <button class="modal__close" type="button" data-close aria-label="閉じる">×</button>
+    <p class="s-en">A QUESTION FROM THE DARK</p>
+    <h3 class="modal__name modal__name--sm" id="confess-title">あなたが悪役なら、<br />何を守るために悪になりますか。</h3>
+    <textarea id="confess-text" placeholder="ここに、あなたの答えを記してください……" maxlength="180"></textarea>
+    <button id="seal-answer" class="btn btn--primary btn--wide" type="button"><span>回答を封印する</span></button>
+    <p class="sealed" id="sealed-msg" hidden>——その答えは、館に記録されました。</p>
+    <p class="modal__note">※この回答はどこにも送信されません。ブラウザ内でのみ扱われます。</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
